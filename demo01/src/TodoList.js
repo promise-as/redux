@@ -1,41 +1,53 @@
 import React, { Component } from 'react';
 
-import 'antd/dist/antd.css'
-import { Input, Button, List } from 'antd';
+import store from './store';
+import { changeInputAction, addItemtAction, deleteItemAction } from './store/actionCreators';
 
-const data = [
-  '早7点40分起床',
-  '早8点30分吃早餐',
-  '下午2点10分开技术例会'
-]
+import TodoListUI from './TodoListUI';
 
 class TodoList extends Component {
+  constructor(props) {
+    super(props)
+    this.state = store.getState()
+    this.changeInputValue = this.changeInputValue.bind(this)
+    this.storeChange = this.storeChange.bind(this)
+    this.addItem = this.addItem.bind(this)
+    this.deleteItem = this.deleteItem.bind(this)
+    // 订阅
+    store.subscribe(this.storeChange)
+  }
 
   render() {
     return (
-      <div style={{ margin: '10px' }}>
-
-        <div>
-          <Input
-            placeholder='Write Something'
-            style={{ width: '250px', marginRight: '10px' }}
-          />
-
-          <Button type="primary">增加</Button>
-        </div>
-
-        <div style={{ margin: '10px', width: '300px' }}>
-          <List
-            bordered
-            dataSource={data}
-            renderItem={item => (
-            <List.Item>{item}</List.Item>
-            )}
-          />
-        </div>
-
-      </div>
+      <TodoListUI
+        inputValue={this.state.inputValue}
+        changeInputValue={this.changeInputValue}
+        addItem={this.addItem}
+        list={this.state.list}
+        deleteItem={this.deleteItem}
+      />
     );
+  }
+
+  storeChange() {
+    this.setState(store.getState())
+  }
+
+  changeInputValue(e) {
+    const action = changeInputAction(e.target.value)
+    store.dispatch(action)
+  }
+
+  addItem() {
+    const action = addItemtAction()
+    store.dispatch(action)
+  }
+
+  deleteItem(index) {
+    // console.log(index, 111);
+
+    const action = deleteItemAction(index)
+    store.dispatch(action)
   }
 }
 

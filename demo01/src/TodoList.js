@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import store from './store';
-import { changeInputAction, addItemtAction, deleteItemAction } from './store/actionCreators';
+import { getMyListAction, changeInputAction, addItemtAction, deleteItemAction } from './store/actionCreators';
 
 import TodoListUI from './TodoListUI';
 
@@ -27,6 +27,18 @@ class TodoList extends Component {
         deleteItem={this.deleteItem}
       />
     );
+  }
+
+  // 组件已经挂载
+  componentDidMount() {
+    // const action = getTodoList()
+    // store.dispatch(action)
+    
+    const action = getMyListAction()
+    store.dispatch(action)
+
+    // console.log(action, 111);
+    
   }
 
   storeChange() {

@@ -1,12 +1,8 @@
-import { CHANGE_INPUT, ADD_ITEM, DELETE_ITEM } from './actionTypes';
+import { CHANGE_INPUT, ADD_ITEM, DELETE_ITEM, GET_LIST } from './actionTypes';
 
 const defaultState = {
   inputValue: 'Write Something',
-  list: [
-    '早7点40分起床',
-    '早8点30分吃早餐',
-    '下午2点10分开技术例会'
-  ]
+  list: []
 }
 
 export default (state = defaultState, action) => {
@@ -32,6 +28,13 @@ export default (state = defaultState, action) => {
   if(action.type === DELETE_ITEM){
     let newState = JSON.parse(JSON.stringify(state))
     newState.list.splice(action.index, 1)
+    return newState;
+  }
+
+  // 从后端获取数据
+  if(action.type === GET_LIST){
+    let newState = JSON.parse(JSON.stringify(state))
+    newState.list = action.data.list;
     return newState;
   }
 
